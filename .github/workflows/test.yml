@@ -16,10 +16,9 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Maven
-        working-directory: out/production/Test
         run: mvn clean install
+        working-directory: .  
 
       - name: Run Tests
-        working-directory: out/production/Test
         run: mvn test
-
+        working-directory: .  
