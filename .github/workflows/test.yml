@@ -1,6 +1,9 @@
 name: Java CI
 
-on: [push, pull_request]
+on:
+  pull_request:
+    branches:
+      - main
 
 jobs:
   test:
@@ -16,10 +19,21 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Maven
-        working-directory: out/production/Test
+        working-directory: src
         run: mvn clean install
 
       - name: Run Tests
-        working-directory: out/production/Test
+        working-directory: src
         run: mvn test
+
+      - name: Upload Test Results (if failure)
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: src/target/surefire-reports/
+
+      - name: Fail if Tests Fail
+        if: failure()
+        run: exit 1
 
